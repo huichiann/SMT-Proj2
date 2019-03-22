@@ -1,9 +1,11 @@
 from app import db
 import datetime
 
-user_challenge_table = db.Table('user_challenge',
-db.Column('user_id', db.Integer, db.Foreignkey('user.id'), primary_key=True),
-db.Column('challenge_id', db.Integer, db.ForeignKey('challenge.id'), primary_key=True))
+user_challenge_table = db.Table(
+	'user_challenge',
+	db.Column('user_id', db.Integer, db.ForeignKey('user.id'), primary_key=True),
+	db.Column('challenge_id', db.Integer, db.ForeignKey('challenge.id'), primary_key=True)
+	)
 
 class User(db.Model):
 	__tablename__ = 'user'
@@ -40,9 +42,9 @@ class Daily_Steps_Record(db.Model):
 	# write your code here
 	id = db.Column(db.Integer, primary_key=True)
 	steps = db.Column(db.Integer, nullable=False)
-	date = db.column(db.Datetime, unique=True, nullable=False)
+	date = db.column(db.DateTime)
 	#foreignkey from user
-	user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+	user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 	#zero-to-one relationship with user
 	user = db.relationship('User', back_populates='daily_step_records')
 
@@ -64,8 +66,8 @@ class Challenge(db.Model):
 	# write your code here
 	id = db.Column(db.Integer, primary_key=True)
 	title = db.Column(db.String(80), nullable=False)
-	start = db.Column(db.Datetime, nullable=False)
-	end = db.Column(db.Datetime, nullable=False)
+	start = db.Column(db.DateTime)
+	end = db.Column(db.DateTime)
 	daily_steps_quota = db.Column(db.Integer, nullable=False)
 	reward = db.Column(db.String(80), nullable=False)
 	#many-to-many relationship with user
