@@ -25,7 +25,7 @@ def create_user():
 		new_user = User(email=email, name=name, contactnumber=contactnumber)
 		db.session.add(new_user)
 		db.session.commit()
-		return jsonify('{} was created'.format(new_user))
+		return jsonify('<200> {} was created'.format(new_user))
 	except Exception as e:
 		return (str(e))
 
@@ -77,7 +77,8 @@ def get_daily_steps():
 @app.route('/challenges/', methods=['GET'])
 def get_challenges():
 	# write your code here
-	return
+	challenges = Challenge.query.all()
+	return jsonify([c.serialize() for c in challenges])
 	
 if __name__ == '__main__':
 	app.run(debug=True)
