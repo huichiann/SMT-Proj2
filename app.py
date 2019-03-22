@@ -23,7 +23,6 @@ def create_user():
 	
 	try:
 		new_user = User(email=email, name=name, contactnumber=contactnumber)
-		print(new_user.name)
 		db.session.add(new_user)
 		db.session.commit()
 		return jsonify('<200> {} was created'.format(new_user))
@@ -35,8 +34,16 @@ def create_daily_step():
 	# write your code here
 	steps = request.json['steps']
 	date = request.json['date']
-	
-	return
+	email = request.json['email']
+	user_id = User.query.filter_by(email=email).first().id
+
+	try:
+		new_dailystep = Daily_Steps_Record(steps=steps, date=date, user_id=user_id)
+		db.session.add(new_dailystep)
+		db.session.commit()
+		return jsonify('<200> {} was created'.format(new_dailystep))
+	except Exception as e:
+		return (str(e))
 
 @app.route('/challenge', methods=["POST"])
 def create_challenge():
@@ -69,7 +76,8 @@ def get_users():
 @app.route('/dailysteps/', methods=['GET'])
 def get_daily_steps():
 	# write your code here
-	return
+	dailysteps = Daily_Steps_Record.query.all()
+	return jsonify([s.serialize() for s in dailysteps])
 
 @app.route('/challenges/', methods=['GET'])
 def get_challenges():
