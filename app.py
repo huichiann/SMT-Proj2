@@ -79,6 +79,7 @@ def get_daily_steps():
 	dailysteps = Daily_Steps_Record.query.all()
 	return jsonify([s.serialize() for s in dailysteps])
 
+
 @app.route('/challenges/', methods=['GET'])
 def get_challenges():
 	# write your code here
