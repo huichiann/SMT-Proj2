@@ -32,13 +32,14 @@ def create_user():
 @app.route('/dailystep', methods=["POST"])
 def create_daily_step():
 	# write your code here
-	steps = request.json['steps']
-	date = request.json['date']
-	email = request.json['email']
+	steps_taken = request.json["steps_taken"]
+	date_added = request.json["date_added"]
+	email = request.json["email"]
 	user_id = User.query.filter_by(email=email).first().id
+	date_added = datetime.strptime(date_added, "%d/%m/%Y")
 
 	try:
-		new_dailystep = Daily_Steps_Record(steps=steps, date=date, user_id=user_id)
+		new_dailystep = Daily_Steps_Record(steps_taken=steps_taken, date_added=date_added, user_id=user_id)
 		db.session.add(new_dailystep)
 		db.session.commit()
 		return jsonify('<200> {} was created'.format(new_dailystep))
