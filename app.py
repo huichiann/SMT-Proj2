@@ -1,5 +1,6 @@
 from flask import Flask, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
+from datetime import datetime
 
 app = Flask(__name__)
 app.debug = True
@@ -16,11 +17,12 @@ def print_hello():
 
 @app.route('/user', methods=["POST"])
 def create_user():
-	# write your code here
-	ic = request.json['ic']
+	email = request.json['email']
 	name = request.json['name']
+	contactnumber = request.json['contactnumber']
+	
 	try:
-		new_user = User(ic=ic, name=name)
+		new_user = User(email=email, name=name, contactnumber=contactnumber)
 		db.session.add(new_user)
 		db.session.commit()
 		return jsonify('{} was created'.format(new_user))
@@ -44,8 +46,10 @@ def create_challenge():
 	start = request.json["start"]
 	end = request.json["end"]
 
-	start = start.strftime("%d/%m/%Y")
-	end = end.strftime("%d/%m/%Y")
+	start = datetime.strptime(start, "%d/%m/%Y")
+	end = datetime.strptime(end, "%d/%m/%Y")
+
+	print(type(start))
 
 	try:
 		new_challenge = Challenge(title=title, daily_steps_quota=daily_steps_quota, reward=reward, start=start, end=end)
@@ -59,8 +63,11 @@ def create_challenge():
 	
 @app.route('/users/', methods=['GET'])
 def get_users():
-	# write your code here
-	return
+  # write your code here
+  if 'email' in request.args:
+    email = request.arg.get('email')
+    user = User.query.filter_by(email=email).first()
+    return jsonify(user.serialize())
 
 @app.route('/dailysteps/', methods=['GET'])
 def get_daily_steps():
