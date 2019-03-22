@@ -46,7 +46,7 @@ class Daily_Steps_Record(db.Model):
 	#foreignkey from user
 	user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 	#zero-to-one relationship with user
-	user = db.relationship('User', back_populates='daily_step_records')
+	user = db.relationship('User', back_populates='daily_steps_records')
 
 	def __init__(self, steps):
 		# write your code here
