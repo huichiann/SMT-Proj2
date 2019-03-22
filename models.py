@@ -20,11 +20,13 @@ class User(db.Model):
 	#many-to-many relationship with challenge
 	challenges = db.relationship('Challenge', secondary=user_challenge_table, lazy=True, back_populates='users')
 
-	def __init__(self, email, name, contactnumber):
+	def __init__(self, email, name, contactnumber, challenges=None):
 		# write your code here
 		self.email = email
 		self.name = name
 		self.contactnumber = contactnumber
+		challenges = [] if challenges is None else challenges
+		self.challenges = challenges
 	
 	def serialize(self):
 		result = {} 
@@ -33,6 +35,7 @@ class User(db.Model):
 		result['email'] = self.email
 		result['name'] = self.name
 		result['contactNumber'] = self.contactnumber 
+		result['challenges'] = [c.serialize() for c in self.challenges]
 		return result 
 		
 class Daily_Steps_Record(db.Model):
@@ -75,13 +78,15 @@ class Challenge(db.Model):
 	#many-to-many relationship with user
 	users = db.relationship('User', secondary=user_challenge_table, lazy=True, back_populates='challenges')
 
-	def __init__(self, title, daily_steps_quota, reward, start, end):
+	def __init__(self, title, daily_steps_quota, reward, start, end, participants = None):
 		# write your code here
 		self.title = title
 		self.daily_steps_quota = daily_steps_quota
 		self.reward = reward
 		self.start = start
 		self.end = end
+		participants = [] if participants is None else participants
+		self.participants = participants
 	
 	def serialize(self):
 		result = {} 
@@ -92,4 +97,5 @@ class Challenge(db.Model):
 		result['reward'] = self.reward
 		result['start'] = self.start
 		result['end'] = self.end 
+		result['participants'] = [p.serialize() for p in self.participants]
 		return result 

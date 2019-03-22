@@ -71,11 +71,22 @@ def get_daily_steps():
 	# write your code here
 	return
 
-@app.route('/challenges/', methods=['GET'])
-def get_challenges():
-	# write your code here
-	challenges = Challenge.query.all()
-	return jsonify([c.serialize() for c in challenges])
+# @app.route('/dailysteps/', methods=['GET'])
+# def get_daily_steps():
+# 	# write your code here
+# 	return
+
+# @app.route('/joinchallenge/', methods=['GET'])
+# def join_challenge():
+#     title = request.json["title"]
+# 	email = request.json["email"]
+# 	# write your code here
+# 	try:
+# 		student_id = Student.query.filter_by(email=email).first().id
+# 		print(student_id)
+# 		title_id = Challenge.query.filter_by(title=title).first().id
+# 		print(title_id)
+# 		new_challenger = 
 	
 if __name__ == '__main__':
 	app.run(debug=True)
